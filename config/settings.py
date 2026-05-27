@@ -92,6 +92,25 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Cloud Storage - Supabase (miễn phí, an toàn)
+if not DEBUG and os.environ.get('SUPABASE_URL'):
+    # Supabase Storage Configuration (S3-compatible)
+    STORAGES = {
+        'default': {
+            'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
+            'OPTIONS': {
+                'access_key': os.environ.get('SUPABASE_ACCESS_KEY'),
+                'secret_key': os.environ.get('SUPABASE_SECRET_KEY'),
+                'storage_bucket_name': 'media',
+                'region_name': 'ap-southeast-1',
+                'endpoint_url': f"{os.environ.get('SUPABASE_URL')}/storage/v1/s3",
+                'custom_domain': f"{os.environ.get('SUPABASE_URL').split('https://')[1]}/storage/v1/object/public/media",
+                'use_ssl': True,
+            }
+        }
+    }
+    MEDIA_URL = f"{os.environ.get('SUPABASE_URL')}/storage/v1/object/public/media/"
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 

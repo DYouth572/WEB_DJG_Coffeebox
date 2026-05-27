@@ -10,7 +10,7 @@ class User(AbstractUser):
     
     role = models.CharField("Vai trò", max_length=10, choices=ROLE_CHOICES, default='customer')
     phone = models.CharField("Số điện thoại", max_length=15, blank=True, null=True)
-    avatar = models.URLField("Ảnh đại diện", max_length=1000, default='avatars/default.png', blank=True, null=True)
+    avatar = models.ImageField("Ảnh đại diện", upload_to='avatars/', blank=True, null=True)
 
     class Meta:
         verbose_name = "Người dùng"
