@@ -16,7 +16,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary_storage',
     'django.contrib.staticfiles',
+    'cloudinary', 
 
     # Custom Apps
     'apps.accounts',
@@ -92,3 +94,14 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Cấu hình lưu trữ bằng Cloudinary
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('Root'),
+    'API_KEY': os.environ.get('527532532654291'),
+    'API_SECRET': os.environ.get('7lp_KSoWNM-6S8-vYYRZThOErrA'),
+}
+
+# Ép Django đẩy file media lên thẳng Cloudinary thay vì lưu trong Docker
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
