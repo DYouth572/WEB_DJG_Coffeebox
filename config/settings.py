@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
      
 
     # Custom Apps
@@ -92,24 +93,18 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Cloud Storage - Supabase (miễn phí, an toàn)
+# Cloud Storage - Supabase (S3-compatible)
 if not DEBUG and os.environ.get('SUPABASE_URL'):
-    # Supabase Storage Configuration (S3-compatible)
-    STORAGES = {
-        'default': {
-            'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
-            'OPTIONS': {
-                'access_key': os.environ.get('SUPABASE_ACCESS_KEY'),
-                'secret_key': os.environ.get('SUPABASE_SECRET_KEY'),
-                'storage_bucket_name': 'media',
-                'region_name': 'ap-southeast-1',
-                'endpoint_url': f"{os.environ.get('SUPABASE_URL')}/storage/v1/s3",
-                'custom_domain': f"{os.environ.get('SUPABASE_URL').split('https://')[1]}/storage/v1/object/public/media",
-                'use_ssl': True,
-            }
-        }
-    }
-    MEDIA_URL = f"{os.environ.get('SUPABASE_URL')}/storage/v1/object/public/media/"
+    # Use django-storages S3 backend pointed to Supabase Storage
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    AWS_ACCESS_KEY_ID = os.environ.get('SUPABASE_ACCESS_KEY')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('SUPABASE_SECRET_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'media')
+    AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME', 'ap-southeast-1')
+    AWS_S3_ENDPOINT_URL = os.environ.get('SUPABASE_URL').rstrip('/') + '/storage/v1'
+    AWS_S3_CUSTOM_DOMAIN = f"{os.environ.get('SUPABASE_URL').rstrip('/')}/storage/v1/object/public/{AWS_STORAGE_BUCKET_NAME}"
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    MEDIA_URL = f"{AWS_S3_CUSTOM_DOMAIN}/"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
