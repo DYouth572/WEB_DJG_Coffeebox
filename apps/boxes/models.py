@@ -24,7 +24,7 @@ class Box(models.Model):
     price_per_hour = models.DecimalField("Giá theo giờ", max_digits=10, decimal_places=2)
     status = models.CharField("Trạng thái", max_length=20, choices=STATUS_CHOICES, default='available')
     description = models.TextField("Mô tả", blank=True)
-    image = models.ImageField("Hình ảnh", upload_to='boxes/', blank=True, null=True)
+    image = models.URLField("Hình ảnh", max_length=1000, blank=True, null=True)
 
     class Meta:
         verbose_name = "Không gian Box"

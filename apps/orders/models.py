@@ -9,7 +9,7 @@ class Product(models.Model):
     price = models.DecimalField("Giá", max_digits=10, decimal_places=0) # Dùng số nguyên cho tiền Việt
     stock = models.IntegerField("Số lượng tồn kho", default=0)
     is_active = models.BooleanField("Đang kinh doanh", default=True)
-    image = models.ImageField("Hình ảnh sản phẩm", upload_to='products/', blank=True, null=True)
+    image = models.URLField("Hình ảnh sản phẩm", max_length=1000, blank=True, null=True)
 
     class Meta:
         verbose_name = "Sản phẩm"
