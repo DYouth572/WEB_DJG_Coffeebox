@@ -1,0 +1,14 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DEBUG: '0'
+      ALLOWED_HOSTS: '127.0.0.1,localhost'
+    volumes:
+      - media_volume:/app/media
+    restart: unless-stopped
+
+volumes:
+  media_volume:

@@ -1,0 +1,13 @@
+
+# Core framework
+Django>=4.2,<5
+
+# Image handling for ImageField
+Pillow>=9.0
+
+# Static file serving for production
+whitenoise>=6.0
+
+# WSGI server for production
+gunicorn>=20.1
+
